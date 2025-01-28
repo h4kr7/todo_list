@@ -1,13 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_mysqldb import MySQL
+import pymysql
+import os
 
 app = Flask(__name__)
 
 # Configure MySQL
-app.config["MYSQL_HOST"] = "localhost"
-app.config["MYSQL_USER"] = "Lokesh"
-app.config["MYSQL_PASSWORD"] = "password"
-app.config["MYSQL_DB"] = "todo_db"
+app.config["MYSQL_HOST"] = os.environ.get("DB_HOST")
+app.config["MYSQL_USER"] = os.environ.get("DB_USER")
+app.config["MYSQL_PASSWORD"] = os.environ.get("DB_PASSWORD")
+app.config["MYSQL_DB"] = os.environ.get("DB_NAME")
 
 mysql = MySQL(app)
 
@@ -57,7 +59,3 @@ def delete_task(task_id):
     mysql.connection.commit()
     cur.close()
     return redirect(url_for("index"))
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
